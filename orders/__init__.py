@@ -1,6 +1,6 @@
-# Order Status constants
+# Order status constants
 
-PENDING = "Pending"
-PROCESSING = "Processing"
-CPMPLETED = "Completed"
-CANCELLED = "Cancelled"
+PENDING = 'Pending'
+PROCESSING = 'Processing'
+COMPLETED = 'Completed'
+CANCELLED = 'Cancelled'
