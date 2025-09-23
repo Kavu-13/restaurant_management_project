@@ -9,11 +9,21 @@ class OrderStatus(models.Model):
 
 class Order(models.Model):
     # example field for your Order model
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     customer_name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    #new field for order status
-    status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL, null=True)
+    status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
-        return f"Orer #{self.id} - {self.customer_name}"
+        return f"Orer #{self.id} -- {self.customer_name}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product_name = models.CharField(max_length=200)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.product_name} (x{self.quantity})"
