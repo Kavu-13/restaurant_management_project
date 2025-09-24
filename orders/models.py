@@ -1,4 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+
+class ActiveOrderManager(models.Manager):
+    def get_active_orders(self):
+        # filter based on OrderStatus.name
+        return super().get_queryset().filter(status__name__in=['pending', 'processing'])
 
 # Create your models here.
 class OrderStatus(models.Model):
@@ -15,8 +22,11 @@ class Order(models.Model):
     status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
+    # Attach custom manager
+    objects = ActiveOrderManager()
+
     def __str__(self):
-        return f"Orer #{self.id} -- {self.customer_name}"
+        return f"Order #{self.id} -- {self.customer_name}"
 
 
 class OrderItem(models.Model):
@@ -27,3 +37,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product_name} (x{self.quantity})"
+
+
+
